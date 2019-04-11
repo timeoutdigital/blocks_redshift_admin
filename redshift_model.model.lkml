@@ -1,7 +1,7 @@
 # # https://github.com/llooker/blocks_redshift_admin
 # #
 # # Make sure this is a connection where the database user has sufficient permissions (per above link)
-connection: "meta"
+connection: "datariver"
 
 case_sensitive: no
 
@@ -9,7 +9,8 @@ include: "redshift_*.dashboard"
 include: "redshift_*.view"
 
 datagroup: nightly {
-  sql_trigger: SELECT TIMEZONE('US/Pacific',GETDATE())::DATE;;
+  # 10am refresh
+  sql_trigger: SELECT FLOOR((EXTRACT(epoch from GETDATE()) - 60*60*10)/(60*60*24));;
 }
 
 persist_with: nightly
